@@ -25,3 +25,15 @@ pub fn player_movement(
         }
     }
 }
+
+pub fn camera_follow_player(
+    player_query: Query<&Transform, (With<Player>, Changed<Transform>)>,
+    mut camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+) {
+    if let Ok(player_transform) = player_query.single() {
+        if let Ok(mut camera_transform) = camera_query.single_mut() {
+            camera_transform.translation.x = player_transform.translation.x;
+            camera_transform.translation.y = player_transform.translation.y;
+        }
+    }
+}

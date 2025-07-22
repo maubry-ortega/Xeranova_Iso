@@ -3,12 +3,14 @@ mod movement;
 
 use bevy::prelude::*;
 use spawn::*;
-use movement::player_movement;
+use movement::{player_movement, camera_follow_player};
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_player);
-        app.add_systems(Update, player_movement);
+        app.add_systems(Update, (player_movement, camera_follow_player));
     }
 }
+
+pub use crate::player::spawn::Player;

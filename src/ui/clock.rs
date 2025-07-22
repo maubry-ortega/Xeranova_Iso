@@ -9,7 +9,7 @@ pub struct ClockText;
 pub fn setup_clock(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SolarTime(0.0));
 
-    let font = asset_server.load("fonts/FiraSans-Bold.ttf");
+    let font = asset_server.load("fonts/FiraSans-ExtraBoldItalic.ttf");
 
     commands.spawn((
         Text::new("Hora: 06:00"),
