@@ -1,10 +1,14 @@
 use bevy::prelude::*;
 use bevy::math::primitives::Cuboid;
 use crate::region::{RegionList, RegionWithOffset};
-use crate::world::voxel::generate_voxel_region;
+use crate::world::voxel::{generate_voxel_region};
 
 #[derive(Component)]
-pub struct SolidBlock; // 👈 componente de colisión para el jugador
+pub struct SolidBlock;
+
+/// Posición recomendada para el spawn del jugador (e.g. bloque más alto)
+#[derive(Resource, Debug, Clone, Copy)]
+pub struct SpawnPosition(pub Vec3);
 
 pub fn spawn_world(
     mut commands: Commands,
@@ -12,8 +16,10 @@ pub fn spawn_world(
     mut materials: ResMut<Assets<StandardMaterial>>,
     regions: Res<RegionList>,
 ) {
-    for region_with in &regions.0 {
-        let RegionWithOffset { region, offset_x, offset_y } = region_with;
+    let mut highest_block = Vec3::new(0.0, 0.0, 0.0);
+    let mut highest_y = f32::MIN;
+
+    for RegionWithOffset { region, offset_x, offset_y } in &regions.0 {
         let map = generate_voxel_region(region);
 
         for z in 0..region.altura_max {
@@ -22,9 +28,11 @@ pub fn spawn_world(
                     let block = &map[y][x][z];
                     if !block.visible { continue; }
 
-                    let tx = x as f32 + *offset_x as f32;
-                    let ty = z as f32;
-                    let tz = y as f32 + *offset_y as f32;
+                    let position = Vec3::new(
+                        x as f32 + *offset_x as f32,
+                        z as f32,
+                        y as f32 + *offset_y as f32,
+                    );
 
                     commands.spawn((
                         SolidBlock,
@@ -34,10 +42,19 @@ pub fn spawn_world(
                             perceptual_roughness: 0.8,
                             ..default()
                         })),
-                        Transform::from_xyz(tx, ty, tz),
+                        Transform::from_translation(position),
                     ));
+
+                    // Detectar el bloque más alto para spawnear al jugador
+                    if position.y > highest_y {
+                        highest_y = position.y;
+                        highest_block = position;
+                    }
                 }
             }
         }
     }
+
+    // SpawnPosition +1 para que no colisione justo con el bloque
+    commands.insert_resource(SpawnPosition(highest_block + Vec3::Y));
 }
