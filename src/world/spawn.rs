@@ -1,43 +1,40 @@
 use bevy::prelude::*;
-use crate::{
-    region::{RegionList, RegionWithOffset},
-    world::generator,
-    utils::coordinates as iso,
-};
+use bevy::math::primitives::Cuboid;
+use bevy::prelude::{Mesh3d, MeshMaterial3d};
+use crate::region::{RegionList, RegionWithOffset};
+use crate::world::voxel::generate_voxel_region;
+use avian3d::prelude::*; // ⬅️ Física
 
-pub fn spawn_world(mut commands: Commands, regions: Res<RegionList>) {
-    let tile_size = Vec2::new(28.0, 14.0);
-    let height_step = 7.0;
+pub fn spawn_world(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    regions: Res<RegionList>,
+) {
+    for region_with in &regions.0 {
+        let RegionWithOffset { region, offset_x, offset_y } = region_with;
+        let map = generate_voxel_region(region);
 
-    for RegionWithOffset { region, offset_x, offset_y } in &regions.0 {
-        let map = generator::generate(region);
-        let [r, g, b] = region.color;
+        for z in 0..region.altura_max {
+            for y in 0..region.alto {
+                for x in 0..region.ancho {
+                    let block = &map[y][x][z];
+                    if !block.visible { continue; }
 
-        for (y, row) in map.iter().enumerate() {
-            for (x, &h) in row.iter().enumerate() {
-                let tile_x = x as i32 + *offset_x;
-                let tile_y = y as i32 + *offset_y;
-
-                let screen_x = iso::to_screen_x(tile_x, tile_y);
-                let screen_y = iso::to_screen_y(tile_x, tile_y);
-
-                let layers = (h * 3.0).round() as i32;
-
-                for z in 0..layers.max(1) {
-                    let factor = ((z + 1) as f32 / layers.max(1) as f32).clamp(0.0, 1.0);
-                    let color = Color::srgb(
-                        (r * factor).clamp(0.0, 1.0),
-                        (g * factor).clamp(0.0, 1.0),
-                        (b * factor).clamp(0.0, 1.0),
-                    );
+                    let tx = x as f32 + *offset_x as f32;
+                    let ty = z as f32;
+                    let tz = y as f32 + *offset_y as f32;
 
                     commands.spawn((
-                        Sprite::from_color(color, tile_size),
-                        Transform::from_xyz(
-                            screen_x,
-                            screen_y - z as f32 * height_step,
-                            z as f32,
-                        ),
+                        Mesh3d(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
+                        MeshMaterial3d(materials.add(StandardMaterial {
+                            base_color: block.color,
+                            perceptual_roughness: 0.8,
+                            ..default()
+                        })),
+                        Transform::from_xyz(tx, ty, tz),
+                        RigidBody::Static, // ⬅️ ¡Colisión!
+                        Collider::cuboid(1.0, 1.0, 1.0),
                     ));
                 }
             }

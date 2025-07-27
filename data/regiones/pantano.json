@@ -3,5 +3,9 @@
   "bioma": "pantano",
   "color": [0.2, 0.5, 0.3],
   "ancho": 20,
-  "alto": 20
+  "alto": 20,
+  "altura_base": 2,
+  "altura_max": 6,
+  "fondo_color": [0.1, 0.1, 0.1],
+  "textura": "slime" 
 }

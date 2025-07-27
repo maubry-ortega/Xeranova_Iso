@@ -3,5 +3,9 @@
   "bioma": "desierto",
   "color": [0.85, 0.75, 0.3],
   "ancho": 16,
-  "alto": 16
+  "alto": 16,
+  "altura_base": 2,
+  "altura_max": 6,
+  "fondo_color": [0.1, 0.1, 0.1],
+  "textura": "slime"
 }

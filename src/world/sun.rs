@@ -17,6 +17,6 @@ pub fn spawn_sun(mut commands: Commands) {
 
 pub fn update_sun(time: Res<Time>, mut query: Query<&mut Transform, With<Sun>>) {
     for mut transform in &mut query {
-        transform.rotate_y(0.1 * time.delta().as_secs_f32());
+        transform.rotate_y(0.01 * time.delta().as_secs_f32());
     }
 }

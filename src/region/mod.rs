@@ -1,12 +1,13 @@
 pub mod loader;
 
 use bevy::prelude::*;
-pub use loader::{Region, load_region};
+use loader::{load_region, Region};
 
-#[derive(Resource, Debug, Clone)]
+/// Lista de regiones con offsets para world spawning
+#[derive(Resource)]
 pub struct RegionList(pub Vec<RegionWithOffset>);
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct RegionWithOffset {
     pub region: Region,
     pub offset_x: i32,
@@ -14,32 +15,20 @@ pub struct RegionWithOffset {
 }
 
 pub struct RegionPlugin;
-
 impl Plugin for RegionPlugin {
     fn build(&self, app: &mut App) {
-        let mut regions = Vec::new();
-
-        // Región del pantano
-        regions.push(RegionWithOffset {
+        // Carga JSON y combina en RegionList
+        let mut list = Vec::new();
+        list.push(RegionWithOffset {
             region: load_region("data/regiones/pantano.json"),
             offset_x: 0,
             offset_y: 0,
         });
-
-        // Región del desierto
-        regions.push(RegionWithOffset {
+        list.push(RegionWithOffset {
             region: load_region("data/regiones/desierto.json"),
             offset_x: 20,
             offset_y: 0,
         });
-
-        // Nueva región: Bosque Gélido
-        regions.push(RegionWithOffset {
-            region: load_region("data/regiones/bosque_helado.json"),
-            offset_x: 40,
-            offset_y: 0,
-        });
-
-        app.insert_resource(RegionList(regions));
+        app.insert_resource(RegionList(list));
     }
 }

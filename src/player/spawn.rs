@@ -1,20 +1,36 @@
 use bevy::prelude::*;
-use crate::utils::coordinates as iso;
+use bevy::math::primitives::Capsule3d;
 
-/// Componente que identifica al jugador
 #[derive(Component)]
 pub struct Player;
 
-pub fn spawn_player(mut commands: Commands) {
-    let start_pos = Vec3::new(
-        iso::to_screen_x(10, 10),
-        iso::to_screen_y(10, 10),
-        100.0,
-    );
+#[derive(Component)]
+pub struct Velocity(pub Vec3);
+
+#[derive(Component)]
+pub struct CameraFollow;
+
+pub fn spawn_player(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+) {
+    let start_pos = Vec3::new(10.0, 10.0, 10.0);
 
     commands.spawn((
-        Sprite::from_color(Color::srgb(0.9, 0.2, 0.2), Vec2::splat(24.0)),
-        Transform::from_translation(start_pos),
         Player,
+        Velocity(Vec3::ZERO),
+        Mesh3d::from(meshes.add(Capsule3d::default())),
+        MeshMaterial3d::from(materials.add(StandardMaterial {
+            base_color: Color::srgb(0.9, 0.2, 0.2), // ✅ sin `.into()`
+            ..default()
+        })),
+        Transform::from_translation(start_pos),
+    ));
+
+    commands.spawn((
+        Camera3d::default(),
+        Transform::from_xyz(4.0, 8.0, 12.0).looking_at(start_pos, Vec3::Y),
+        CameraFollow,
     ));
 }
