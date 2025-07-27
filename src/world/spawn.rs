@@ -1,9 +1,10 @@
 use bevy::prelude::*;
 use bevy::math::primitives::Cuboid;
-use bevy::prelude::{Mesh3d, MeshMaterial3d};
 use crate::region::{RegionList, RegionWithOffset};
 use crate::world::voxel::generate_voxel_region;
-use avian3d::prelude::*; // ⬅️ Física
+
+#[derive(Component)]
+pub struct SolidBlock; // 👈 componente de colisión para el jugador
 
 pub fn spawn_world(
     mut commands: Commands,
@@ -26,15 +27,14 @@ pub fn spawn_world(
                     let tz = y as f32 + *offset_y as f32;
 
                     commands.spawn((
-                        Mesh3d(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
-                        MeshMaterial3d(materials.add(StandardMaterial {
+                        SolidBlock,
+                        Mesh3d::from(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
+                        MeshMaterial3d::from(materials.add(StandardMaterial {
                             base_color: block.color,
                             perceptual_roughness: 0.8,
                             ..default()
                         })),
                         Transform::from_xyz(tx, ty, tz),
-                        RigidBody::Static, // ⬅️ ¡Colisión!
-                        Collider::cuboid(1.0, 1.0, 1.0),
                     ));
                 }
             }

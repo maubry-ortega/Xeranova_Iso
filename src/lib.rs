@@ -3,6 +3,8 @@ pub mod world;
 pub mod player;
 pub mod utils;
 pub mod ui;
+pub mod physics;
+
 
 use bevy::prelude::*;
 use region::RegionPlugin;

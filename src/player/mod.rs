@@ -1,12 +1,13 @@
 pub mod spawn;
 pub mod movement;
 
-// 🔓 reexporta los componentes aquí
-pub use spawn::{Player, Velocity, CameraFollow};
+pub use crate::physics::Velocity;
+pub use spawn::{Player, CameraFollow};
 
 use bevy::prelude::*;
 use spawn::spawn_player;
-use movement::{player_movement, jump_system, apply_velocity, camera_follow_player};
+use movement::{player_movement, jump_system, camera_follow_player};
+use crate::physics::simple_ground_collision;
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -15,7 +16,7 @@ impl Plugin for PlayerPlugin {
         app.add_systems(Update, (
             player_movement,
             jump_system,
-            apply_velocity,
+            simple_ground_collision,
             camera_follow_player,
         ));
     }

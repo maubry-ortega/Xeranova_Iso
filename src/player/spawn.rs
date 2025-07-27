@@ -1,11 +1,9 @@
 use bevy::prelude::*;
 use bevy::math::primitives::Capsule3d;
+use crate::physics::Velocity;
 
 #[derive(Component)]
 pub struct Player;
-
-#[derive(Component)]
-pub struct Velocity(pub Vec3);
 
 #[derive(Component)]
 pub struct CameraFollow;
@@ -22,7 +20,7 @@ pub fn spawn_player(
         Velocity(Vec3::ZERO),
         Mesh3d::from(meshes.add(Capsule3d::default())),
         MeshMaterial3d::from(materials.add(StandardMaterial {
-            base_color: Color::srgb(0.9, 0.2, 0.2), // ✅ sin `.into()`
+            base_color: Color::srgb(0.9, 0.2, 0.2),
             ..default()
         })),
         Transform::from_translation(start_pos),

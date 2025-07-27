@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use crate::player::{Player, Velocity, CameraFollow};
+use crate::player::{Player, CameraFollow};
+use crate::physics::Velocity;
 
 pub fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
@@ -29,28 +30,12 @@ pub fn player_movement(
 
 pub fn jump_system(
     keyboard: Res<ButtonInput<KeyCode>>,
-    mut query: Query<(&Transform, &mut Velocity), With<Player>>,
+    query: Query<&Transform, With<Player>>,
+    mut velocity_query: Query<&mut Velocity, With<Player>>,
 ) {
-    for (transform, mut velocity) in &mut query {
-        if keyboard.just_pressed(KeyCode::Space) && transform.translation.y <= 1.1 {
+    for (transform, mut velocity) in query.iter().zip(velocity_query.iter_mut()) {
+        if keyboard.just_pressed(KeyCode::Space) && transform.translation.y <= 1.05 {
             velocity.0.y = 6.0;
-        }
-    }
-}
-
-pub fn apply_velocity(
-    mut query: Query<(&mut Transform, &mut Velocity), With<Player>>,
-    time: Res<Time>,
-) {
-    for (mut transform, mut velocity) in &mut query {
-        velocity.0.y -= 9.8 * time.delta_secs(); // ✅ corregido
-
-        transform.translation += velocity.0 * time.delta_secs();
-
-        // colisión básica con el suelo
-        if transform.translation.y < 1.0 {
-            transform.translation.y = 1.0;
-            velocity.0.y = 0.0;
         }
     }
 }
@@ -59,10 +44,9 @@ pub fn camera_follow_player(
     player_query: Query<&Transform, With<Player>>,
     mut camera_query: Query<&mut Transform, (With<CameraFollow>, Without<Player>)>,
 ) {
-    if let (Ok(player), Ok(mut cam)) = (player_query.get_single(), camera_query.get_single_mut()) {
+    if let (Ok(player), Ok(mut cam)) = (player_query.single(), camera_query.single_mut()) {
         let offset = Vec3::new(-6.0, 6.0, 6.0);
         let target = player.translation + offset;
-
         cam.translation = cam.translation.lerp(target, 0.1);
         cam.look_at(player.translation, Vec3::Y);
     }
