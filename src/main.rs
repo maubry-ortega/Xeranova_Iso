@@ -1,13 +1,15 @@
 use bevy::prelude::*;
-use xeranova_game::GamePlugin;
-use xeranova_game::world::sun::{Sun, update_sun};
+use xeranova_game::{GamePlugin, GameState}; // ✅ Importación única y válida
+use xeranova_game::ui::menu::{spawn_menu, handle_menu_input};
+use xeranova_game::world::sun::Sun;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(GamePlugin)
-        .add_systems(Startup, setup)
-        .add_systems(Update, update_sun)
+        .init_state::<GameState>()
+        .add_systems(OnEnter(GameState::Menu), spawn_menu)
+        .add_systems(Update, handle_menu_input.run_if(in_state(GameState::Menu)))
         .run();
 }
 

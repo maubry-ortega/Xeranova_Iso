@@ -1,4 +1,5 @@
 mod clock;
+pub mod menu;
 
 use bevy::prelude::*;
 use clock::{setup_clock, update_clock};

@@ -1,14 +1,21 @@
 use bevy::prelude::*;
 use bevy::math::primitives::Cuboid;
-use crate::region::{RegionList, RegionWithOffset};
+use crate::region::RegionList;
 use crate::world::voxel::generate_voxel_region;
+use crate::region::types::Region;
 
 #[derive(Component)]
 pub struct SolidBlock;
 
-/// Posición recomendada para el spawn del jugador (bloque más alto del mundo)
 #[derive(Resource, Debug, Clone, Copy)]
 pub struct SpawnPosition(pub Vec3);
+
+#[derive(Debug, Clone)]
+pub struct RegionWithOffset {
+    pub region: Region,
+    pub offset_x: usize,
+    pub offset_y: usize,
+}
 
 pub fn spawn_world(
     mut commands: Commands,
@@ -19,25 +26,24 @@ pub fn spawn_world(
     let mut highest_block_pos = Vec3::ZERO;
     let mut max_y = f32::MIN;
 
-    for RegionWithOffset { region, offset_x, offset_y } in &regions.0 {
-        let voxel_map = generate_voxel_region(region);
+    for region_data in &regions.0 {
+        let region = &region_data.region;
+        let offset_x = region_data.offset_x;
+        let offset_y = region_data.offset_y;
+        let map = generate_voxel_region(region);
 
-        let width = region.width;
-        let height = region.height;
-        let elevation = region.elevation_max;
-
-        for z in 0..elevation {
-            for y in 0..height {
-                for x in 0..width {
-                    let block = &voxel_map[y][x][z];
+        for z in 0..region.elevation_max {
+            for y in 0..region.height {
+                for x in 0..region.width {
+                    let block = &map[y][x][z];
                     if !block.visible {
                         continue;
                     }
 
                     let position = Vec3::new(
-                        x as f32 + *offset_x as f32,
+                        x as f32 + offset_x as f32,
                         z as f32,
-                        y as f32 + *offset_y as f32,
+                        y as f32 + offset_y as f32,
                     );
 
                     commands.spawn((
@@ -51,7 +57,6 @@ pub fn spawn_world(
                         Transform::from_translation(position),
                     ));
 
-                    // Determinar el punto de spawn del jugador (bloque más alto)
                     if position.y > max_y {
                         max_y = position.y;
                         highest_block_pos = position;
@@ -61,6 +66,5 @@ pub fn spawn_world(
         }
     }
 
-    // +Y para que el jugador no spawnee dentro del bloque
     commands.insert_resource(SpawnPosition(highest_block_pos + Vec3::Y));
 }

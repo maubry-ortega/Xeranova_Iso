@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::region::loader::Region;
+use crate::region::types::Region;
 use noise::{NoiseFn, Perlin};
 
 #[derive(Clone)]
