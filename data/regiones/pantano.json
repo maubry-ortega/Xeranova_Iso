@@ -1,11 +1,45 @@
 {
-  "nombre": "Pantanos Viscogénicos",
-  "bioma": "pantano",
-  "color": [0.2, 0.5, 0.3],
-  "ancho": 20,
-  "alto": 20,
-  "altura_base": 2,
-  "altura_max": 6,
-  "fondo_color": [0.1, 0.1, 0.1],
-  "textura": "slime" 
+  "name": "Pantanos Viscogénicos",
+  "biome": "pantano",
+  "base_color": [0.2, 0.5, 0.3],
+  "background_color": [0.1, 0.1, 0.1],
+  "texture_id": "slime",
+  "width": 20,
+  "height": 20,
+  "elevation_min": 2,
+  "elevation_max": 6,
+
+  "fractus_origin": "Universo Nahl - simbiosis líquida de consciencias",
+  "physical_anomalies": [
+    "barro con memoria colectiva",
+    "niebla espesa que ralentiza el pulso viral"
+  ],
+
+  "khaon_virus_level": "moderado",
+  "pulse_visibility": false,
+
+  "factions_present": [
+    "Respiradores del Lodo",
+    "Susurradores del Vacío"
+  ],
+
+  "unique_fractus": [
+    {
+      "name": "Fractus de la Podredumbre Serena",
+      "effect": "Permite disolverse en lodo y emerger en otro punto cercano",
+      "evolution_stage": "latente"
+    }
+  ],
+
+  "environmental_effects": [
+    "lluvias ácidas intermitentes",
+    "ecos de pensamientos ajenos en la bruma"
+  ],
+
+  "dynamic_events": [
+    "un eco mental infectado colapsa y contamina la región",
+    "una raíz fractus emerge al romperse el equilibrio del pantano"
+  ],
+
+  "tags": ["hostil", "húmedo", "infectado", "ancestral"]
 }

@@ -1,11 +1,45 @@
 {
-  "nombre": "Bosque Gélido",
-  "bioma": "bosque_nieve",
-  "color": [0.7, 0.9, 1.0],
-  "ancho": 16,
-  "alto": 16,
-  "altura_base": 2,
-  "altura_max": 6,
-  "fondo_color": [0.1, 0.1, 0.1],
-  "textura": "slime"
+  "name": "Bosque Gélido",
+  "biome": "bosque_nieve",
+  "base_color": [0.7, 0.9, 1.0],
+  "background_color": [0.1, 0.1, 0.1],
+  "texture_id": "slime",
+  "width": 30,
+  "height": 30,
+  "elevation_min": 2,
+  "elevation_max": 6,
+
+  "fractus_origin": "Universo Thalestra - dominio del hielo y la quietud psíquica",
+  "physical_anomalies": [
+    "niebla que congela recuerdos",
+    "cristales que amplifican pensamientos negativos"
+  ],
+
+  "khaon_virus_level": "bajo",
+  "pulse_visibility": true,
+
+  "factions_present": [
+    "Corte del Aliento Roto",
+    "Susurradores del Vacío"
+  ],
+
+  "unique_fractus": [
+    {
+      "name": "Fractus del Silencio Blanco",
+      "effect": "Detiene el movimiento del entorno durante unos segundos",
+      "evolution_stage": "latente"
+    }
+  ],
+
+  "environmental_effects": [
+    "ventiscas cortantes impredecibles",
+    "sonidos distorsionados por cristales resonantes"
+  ],
+
+  "dynamic_events": [
+    "una criatura de hielo eterno despierta de su letargo",
+    "una brecha dimensional se congela antes de colapsar"
+  ],
+
+  "tags": ["frío", "aislado", "infectado", "mental"]
 }

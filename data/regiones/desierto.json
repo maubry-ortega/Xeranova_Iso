@@ -1,11 +1,45 @@
 {
-  "nombre": "Desierto Radiante",
-  "bioma": "desierto",
-  "color": [0.85, 0.75, 0.3],
-  "ancho": 16,
-  "alto": 16,
-  "altura_base": 2,
-  "altura_max": 6,
-  "fondo_color": [0.1, 0.1, 0.1],
-  "textura": "slime"
+  "name": "Desierto Radiante",
+  "biome": "desierto",
+  "base_color": [0.85, 0.75, 0.3],
+  "background_color": [0.1, 0.1, 0.1],
+  "texture_id": "slime",
+  "width": 32,
+  "height": 32,
+  "elevation_min": 2,
+  "elevation_max": 6,
+
+  "fractus_origin": "Universo T'Lakar - ciclo de arena y simbiosis",
+  "physical_anomalies": [
+    "arenas que absorben memoria",
+    "campos de eco viral distorsionado"
+  ],
+
+  "khaon_virus_level": "alto",
+  "pulse_visibility": true,
+
+  "factions_present": [
+    "Clan Mu-Tez",
+    "Respiradores del Lodo"
+  ],
+
+  "unique_fractus": [
+    {
+      "name": "Fractus del Calor Silente",
+      "effect": "Absorbe sonido y libera ondas térmicas",
+      "evolution_stage": "latente"
+    }
+  ],
+
+  "environmental_effects": [
+    "tormentas de arena virales",
+    "alucinaciones por radiación del alma"
+  ],
+
+  "dynamic_events": [
+    "una ciudad semienterrada revive por una anomalía planar",
+    "un eco viral atrapado pide ayuda mental para liberarse"
+  ],
+
+  "tags": ["hostil", "árido", "infectado", "impredecible"]
 }

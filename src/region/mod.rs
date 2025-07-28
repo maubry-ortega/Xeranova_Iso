@@ -29,6 +29,11 @@ impl Plugin for RegionPlugin {
             offset_x: 20,
             offset_y: 0,
         });
+        list.push(RegionWithOffset {
+            region: load_region("data/regiones/bosque_helado.json"),
+            offset_x: 0,
+            offset_y: 40,
+        });
         app.insert_resource(RegionList(list));
     }
 }
