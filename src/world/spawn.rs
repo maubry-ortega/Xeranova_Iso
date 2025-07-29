@@ -3,6 +3,7 @@ use bevy::math::primitives::Cuboid;
 use crate::region::RegionList;
 use crate::world::voxel::generate_voxel_region;
 use crate::region::types::Region;
+use crate::GameState;
 
 #[derive(Component)]
 pub struct SolidBlock;
@@ -22,7 +23,10 @@ pub fn spawn_world(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     regions: Res<RegionList>,
+    mut next_state: ResMut<NextState<GameState>>,
 ) {
+    println!("🧱 spawn_world ejecutado");
+
     let mut highest_block_pos = Vec3::ZERO;
     let mut max_y = f32::MIN;
 
@@ -67,4 +71,5 @@ pub fn spawn_world(
     }
 
     commands.insert_resource(SpawnPosition(highest_block_pos + Vec3::Y));
+    next_state.set(GameState::Playing);
 }

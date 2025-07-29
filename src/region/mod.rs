@@ -6,7 +6,6 @@ use rand::prelude::*;
 use std::fs;
 
 use crate::utils::map_size::SelectedMapSize;
-use crate::region::loader::load_region;
 use crate::world::spawn::RegionWithOffset;
 use crate::GameState;
 
@@ -26,7 +25,12 @@ fn generate_regions(
     selected: Res<SelectedMapSize>,
     mut next_state: ResMut<NextState<GameState>>,
 ) {
-    let Some(map_size) = selected.0 else { return };
+    let Some(map_size) = selected.0 else {
+        println!("⚠️ No hay tamaño de mapa seleccionado");
+        return;
+    };
+
+    println!("🌍 generate_regions ejecutado");
 
     let (cols, rows) = map_size.dimensions();
     let region_files: Vec<_> = fs::read_dir("assets/regions")
@@ -48,8 +52,8 @@ fn generate_regions(
     for y in 0..rows {
         for x in 0..cols {
             if let Some(path) = region_files.choose(&mut rng) {
-                let region = load_region(path.to_str().unwrap());
-                regions.push(RegionWithOffset {
+                let region = crate::region::loader::load_region(path.to_str().unwrap());
+                regions.push(crate::world::spawn::RegionWithOffset {
                     region,
                     offset_x: x as usize * 32,
                     offset_y: y as usize * 32,
@@ -59,5 +63,9 @@ fn generate_regions(
     }
 
     region_list.0 = regions;
-    next_state.set(GameState::Playing);
+
+    println!("✅ Regiones generadas: {}", region_list.0.len());
+
+    // NUEVO estado intermedio
+    next_state.set(GameState::GeneratingDone);
 }

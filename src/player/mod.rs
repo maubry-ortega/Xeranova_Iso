@@ -3,6 +3,7 @@ pub mod movement;
 
 pub use spawn::{Player, CameraFollow};
 pub use crate::physics::Velocity;
+use crate::GameState;
 
 use bevy::prelude::*;
 use spawn::spawn_player;
@@ -14,7 +15,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
-            PostStartup,
+            OnEnter(GameState::Playing),
             spawn_player.in_set(PlayerSystems::Spawn),
         )
         .add_systems(

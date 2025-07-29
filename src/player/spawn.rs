@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy::math::primitives::Capsule3d;
 use crate::physics::Velocity;
+use crate::world::spawn::SpawnPosition;
 
 #[derive(Component)]
 pub struct Player;
@@ -12,8 +13,9 @@ pub fn spawn_player(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    spawn_pos: Res<SpawnPosition>,
 ) {
-    let start_pos = Vec3::new(10.0, 10.0, 10.0);
+    let position = spawn_pos.0;
 
     commands.spawn((
         Player,
@@ -23,12 +25,13 @@ pub fn spawn_player(
             base_color: Color::srgb(0.9, 0.2, 0.2),
             ..default()
         })),
-        Transform::from_translation(start_pos),
+        Transform::from_translation(position),
     ));
 
     commands.spawn((
         Camera3d::default(),
-        Transform::from_xyz(4.0, 8.0, 12.0).looking_at(start_pos, Vec3::Y),
+        Transform::from_xyz(position.x + 4.0, position.y + 6.0, position.z + 8.0)
+            .looking_at(position, Vec3::Y),
         CameraFollow,
     ));
 }
