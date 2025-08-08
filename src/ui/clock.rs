@@ -44,6 +44,6 @@ pub fn update_clock(
     let formatted = format!("Hora: {:02}:00", hour % 24);
 
     for mut text in &mut query {
-        **text = formatted.clone(); // `Text` ahora es un `DerefMut` a String
+        **text = formatted.clone();
     }
 }
